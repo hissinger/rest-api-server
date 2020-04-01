@@ -1,8 +1,33 @@
 const should = require('should');
 const request = require('supertest');
 const app = require('../../app');
+const models = require('../../models/models');
+const dbSync = require('../../../bin/db-sync');
 
 describe('Test', () => {
+
+  before('sync db', (done) => {
+    dbSync().then(() => {
+      console.log('database sync');
+      done();
+    });
+  });
+
+  const testUsers = [
+    {name: 'Alice'},
+    {name: 'Kelly'},
+    {name: 'Ahn'}
+  ]
+
+  before('insert test data', (done) => {
+    models.User.bulkCreate(testUsers).then(() => done());
+  });
+
+  after('Clear up', (done) => {
+    models.User.drop();
+    dbSync().then(() => done());
+  });
+
   it('GET /users', (done) => {
     request(app)
       .get('/users')
