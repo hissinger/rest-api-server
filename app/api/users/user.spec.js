@@ -20,12 +20,12 @@ describe('Test', () => {
   ]
 
   before('insert test data', (done) => {
-    models.User.bulkCreate(testUsers).then(() => done());
+    models.User.bulkCreate(testUsers).then(done());
   });
 
   after('Clear up', (done) => {
     models.User.drop();
-    dbSync().then(() => done());
+    dbSync().then(done());
   });
 
   it('GET /users', (done) => {

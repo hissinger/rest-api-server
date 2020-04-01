@@ -1,52 +1,50 @@
 const models = require('../../models/models');
 
 module.exports = {
-  index: (req, res)=> {
-    models.User.findAll()
-      .then(users => res.json(users));
+  index: async (req, res) => {
+    users = await models.User.findAll()
+    return res.json(users);
   },
-  show: (req, res) => {
+  show: async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (!id) {
       return res.status(400).json({err: 'Incorrect id'});
     }
 
-    models.User.findOne({
-      where: {
-        id: id
-      }
-    }).then(user => {
-      if (!user) {
-        return res.status(404).json({err: 'No user'});
-      }
+    user = await models.User.findOne({where: {id}});
+    if (!user) {
+      return res.status(404).json({err: 'No user'});
+    } else {
       return res.json(user);
-    })
+    }
   },
-  delete: (req, res) => {
+  delete: async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (!id) {
       return res.status(400).json({err: 'Incorrect id'});
     }
     
-    models.User.destroy({
+    num = await models.User.destroy({
       where: {
         id: id
       }
-    }).then( num => {
-      if (num == 0) {
+    })
+    if (num == 0) {
         return res.status(404).json({err: 'No user'});
-      }
-      return res.status(204).send()
-    });
+    } else {
+      return res.status(204).send();
+    }
   },
-  create: (req, res) => {
+  create: async (req, res) => {
     const name = req.body.name || '';
     if (!name.length) {
       return res.status(400).json({err: 'Incorrect name'});
     }
   
-    models.User.create({
+    user = await models.User.create({
       name: name
-    }).then(user => res.status(201).json(user));
+    });
+    
+    return res.status(201).json(user);
   }
 }
