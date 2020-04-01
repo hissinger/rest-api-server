@@ -4,11 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "node_modules/.bin/mocha api/users/user.spec.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.1",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   }
 }
